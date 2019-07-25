@@ -28,7 +28,7 @@ const UserLoginMutation = async (
   }
 
   return await user
-    .genUpdate()
+    .update()
     .setAuthToken(AuthToken.create(user))
     .genSave();
 };

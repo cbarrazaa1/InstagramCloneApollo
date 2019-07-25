@@ -57,6 +57,19 @@ class EntUser {
     return getNullableEnt(await EntUserModel.findOne({authToken}));
   }
 
+  static create(): EntUser {
+    return new EntUser(new EntUserModel(), true);
+  }
+
+  static async genUpdateForID(id: string): Promise<EntUser> {
+    return new EntUser((await EntUser.genEnforce(id)).data, true);
+  }
+
+  update(): EntUser {
+    this.isMutating = true;
+    return this;
+  }
+
   async genSave(): Promise<EntUser> {
     if (!this.isMutating) {
       throw new Error(
@@ -66,19 +79,6 @@ class EntUser {
     await this.data.save();
     this.isMutating = false;
     return this;
-  }
-
-  static create(): EntUser {
-    return new EntUser(new EntUserModel(), true);
-  }
-
-  genUpdate(): EntUser {
-    this.isMutating = true;
-    return this;
-  }
-
-  static async genUpdateForID(id: string): Promise<EntUser> {
-    return new EntUser((await EntUser.genEnforce(id)).data, true);
   }
 
   getID(): string {
