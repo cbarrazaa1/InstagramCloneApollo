@@ -20,10 +20,10 @@ const AppNavigator = createStackNavigator({
 
 const AppContainer = createAppContainer(AppNavigator);
 const client = new ApolloClient({uri: 'http://10.0.0.130:4000/graphql'});
-export const App = (): React.Node => {
+export function App(): React.Node {
   return (
     <ApolloProvider client={client}>
       <AppContainer />
     </ApolloProvider>
   );
-};
+}

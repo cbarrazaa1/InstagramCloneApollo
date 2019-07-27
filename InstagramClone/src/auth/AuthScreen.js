@@ -27,7 +27,8 @@ const mutation = gql`
     }
   }
 `;
-const AuthScreen = (): React.Node => {
+
+function AuthScreen(): React.Node {
   return (
     <>
       <View style={styles.root}>
@@ -52,7 +53,7 @@ const AuthScreen = (): React.Node => {
       </View>
     </>
   );
-};
+}
 
 const styles = StyleSheet.create({
   root: {

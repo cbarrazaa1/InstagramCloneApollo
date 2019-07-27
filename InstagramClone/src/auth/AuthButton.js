@@ -11,7 +11,7 @@ type Props = {|
   +onPress: () => void,
 |};
 
-const AuthButton = ({text, onPress}: Props): React.Node => {
+function AuthButton({text, onPress}: Props): React.Node {
   return (
     <TouchableOpacity onPress={onPress}>
       <View style={styles.root}>
@@ -19,7 +19,7 @@ const AuthButton = ({text, onPress}: Props): React.Node => {
       </View>
     </TouchableOpacity>
   );
-};
+}
 
 const styles = StyleSheet.create({
   root: {

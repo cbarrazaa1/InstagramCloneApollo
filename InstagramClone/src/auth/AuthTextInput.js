@@ -13,17 +13,13 @@ type Props = {|
   +onChangeText: (text: string) => void,
 |};
 
-const AuthTextInput = ({
-  placeholder,
-  style,
-  onChangeText,
-}: Props): React.Node => {
+function AuthTextInput({placeholder, style, onChangeText}: Props): React.Node {
   return (
     <View style={[style, styles.root]}>
       <TextInput placeholder={placeholder} style={styles.input} />
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   root: {
