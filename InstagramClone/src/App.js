@@ -10,7 +10,7 @@ import {
   createSwitchNavigator,
 } from 'react-navigation';
 import ApolloClient from 'apollo-boost';
-import {ApolloProvider} from 'react-apollo';
+import {ApolloProvider} from '@apollo/react-hooks';
 import LoginScreen from './auth/LoginScreen';
 import SignUpScreen from './auth/SignUpScreen';
 import FeedScreen from './feed/FeedScreen';
@@ -49,11 +49,19 @@ const AppContainer = createAppContainer(
     }
   )
 );
-const client = new ApolloClient({uri: 'http://10.0.0.130:4000/graphql'});
-export function App(): React.Node {
+
+const client = new ApolloClient({
+  uri: 'http://10.0.0.130:4000/graphql',
+  headers: {
+    authorization:
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVkMzgwMDgxNDBlNjgxYThjNDgzMTMyNyIsImlhdCI6MTU2Mzk1MTI4NSwiZXhwIjoxNTY2NTQzMjg1LCJhdWQiOiJienQwS0tBd21xOVhmRWJGOFMzN2RWdG9uaVRZNWw5WSIsImlzcyI6Ikluc3RhZ3JhbUNsb25lU2VydmVyIiwic3ViIjoiY2JhcnJhemFhMSJ9.P-qIV5TpXTWL93Xz2bK7OpzAyRxB6XqIHC7ifdAp3sM',
+  },
+});
+
+export function App(props): React.Node {
   return (
     <ApolloProvider client={client}>
-      <AppContainer />
+      <AppContainer {...props} />
     </ApolloProvider>
   );
 }

@@ -41,12 +41,7 @@ function LoginScreen(_: Props): React.Node {
           <View style={styles.inputView}>
             <TextInput placeholder="Username" />
             <TextInput placeholder="Password" secureTextEntry={true} />
-            <Mutation
-              mutation={mutation}
-              variables={{username: 'cbarrazaa2', password: 'test'}}
-            >
-              {userSignUp => <Button text="Log In" onPress={() => null} />}
-            </Mutation>
+            <Button text="Log In" onPress={() => null} />
           </View>
         </View>
       </View>
