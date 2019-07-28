@@ -4,6 +4,8 @@
  */
 'use strict';
 import * as React from 'react';
+import {useState, useEffect} from 'react';
+import AsyncStorage from '@react-native-community/async-storage';
 import {
   createAppContainer,
   createStackNavigator,
@@ -50,18 +52,26 @@ const AppContainer = createAppContainer(
   )
 );
 
-const client = new ApolloClient({
-  uri: 'http://10.0.0.130:4000/graphql',
-  headers: {
-    authorization:
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVkMzgwMDgxNDBlNjgxYThjNDgzMTMyNyIsImlhdCI6MTU2Mzk1MTI4NSwiZXhwIjoxNTY2NTQzMjg1LCJhdWQiOiJienQwS0tBd21xOVhmRWJGOFMzN2RWdG9uaVRZNWw5WSIsImlzcyI6Ikluc3RhZ3JhbUNsb25lU2VydmVyIiwic3ViIjoiY2JhcnJhemFhMSJ9.P-qIV5TpXTWL93Xz2bK7OpzAyRxB6XqIHC7ifdAp3sM',
-  },
-});
+export function App(): React.Node {
+  const [client, setClient] = useState(null);
+  useEffect(() => {
+    async function createApolloClient() {
+      const authToken = await AsyncStorage.getItem('AUTH_TOKEN');
+      setClient(
+        new ApolloClient({
+          uri: 'http://10.0.0.130:4000/graphql',
+          headers: {authorization: authToken ?? ''},
+        })
+      );
+    }
+    createApolloClient();
+  }, [client]);
 
-export function App(props): React.Node {
   return (
-    <ApolloProvider client={client}>
-      <AppContainer {...props} />
-    </ApolloProvider>
+    client != null && (
+      <ApolloProvider client={client}>
+        <AppContainer />
+      </ApolloProvider>
+    )
   );
 }
