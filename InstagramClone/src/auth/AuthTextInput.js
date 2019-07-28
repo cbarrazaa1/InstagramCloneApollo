@@ -26,6 +26,7 @@ function AuthTextInput({
         placeholder={placeholder}
         secureTextEntry={secureTextEntry}
         style={styles.input}
+        onChangeText={onChangeText}
       />
     </View>
   );

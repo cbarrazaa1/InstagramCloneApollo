@@ -4,15 +4,92 @@
  */
 'use strict';
 import * as React from 'react';
+import {useEffect} from 'react';
 import {Dimensions, StyleSheet, Text, View} from 'react-native';
 import Button from './AuthButton';
 import TextInput from './AuthTextInput';
 import {useNavigation} from 'react-navigation-hooks';
+import {useState} from 'react';
+import {useMutation, useApolloClient} from '@apollo/react-hooks';
+import {gql} from 'apollo-boost';
+import AsyncStorage from '@react-native-community/async-storage';
+
+const mutation = gql`
+  mutation SignUpScreenMutation(
+    $username: String!
+    $name: String!
+    $password: String!
+  ) {
+    user_sign_up(username: $username, name: $name, password: $password) {
+      id
+      username
+      authToken
+    }
+  }
+`;
 
 type Props = {||};
 
 function SignUpScreen(_: Props): React.Node {
-  const {goBack} = useNavigation();
+  const {navigate, goBack} = useNavigation();
+  const [username, setUsername] = useState('');
+  const [name, setName] = useState('');
+  const [password, setPassword] = useState('');
+  const [retypedPassword, setRetypedPassword] = useState('');
+  const [commitSignUpMutation, {data, error, loading}] = useMutation(mutation, {
+    variables: {
+      username,
+      name,
+      password,
+    },
+  });
+  const client = useApolloClient();
+
+  useEffect(() => {
+    if (data != null) {
+      async function saveAuthToken() {
+        client.clearStore();
+        await AsyncStorage.setItem('AUTH_TOKEN', data?.user_sign_up?.authToken);
+        navigate('App');
+      }
+      saveAuthToken();
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (error != null) {
+      alert(error);
+    }
+  }, [error]);
+
+  const onSignUpPress = (): void => {
+    if (username.length < 5) {
+      alert('Username must be at least 5 characters long.');
+      return;
+    }
+
+    if (name.length === 0) {
+      alert('You must enter a name.');
+      return;
+    }
+
+    if (password.length < 5) {
+      alert('Password must be at least 5 characters long.');
+      return;
+    }
+
+    if (retypedPassword.lenght === 0) {
+      alert('Please retype your password.');
+      return;
+    }
+
+    if (password !== retypedPassword) {
+      alert('Passwords do not match.');
+      return;
+    }
+
+    commitSignUpMutation();
+  };
 
   return (
     <>
@@ -20,10 +97,19 @@ function SignUpScreen(_: Props): React.Node {
         <Text style={styles.title}>Create Account</Text>
         <View style={styles.inputContainer}>
           <View style={styles.inputView}>
-            <TextInput placeholder="Username" />
-            <TextInput placeholder="Full name" />
-            <TextInput placeholder="Password" secureTextEntry={true} />
-            <Button text="Confirm" />
+            <TextInput placeholder="Username" onChangeText={setUsername} />
+            <TextInput placeholder="Full name" onChangeText={setName} />
+            <TextInput
+              placeholder="Password"
+              onChangeText={setPassword}
+              secureTextEntry={true}
+            />
+            <TextInput
+              placeholder="Re-type password"
+              onChangeText={setRetypedPassword}
+              secureTextEntry={true}
+            />
+            <Button text="Confirm" onPress={onSignUpPress} loading={loading} />
           </View>
         </View>
       </View>
