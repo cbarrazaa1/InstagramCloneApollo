@@ -2,9 +2,9 @@
  * @format
  * @flow strict
  */
-
-import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+'use strict';
 import * as React from 'react';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 type Props = {|
   +text: string,

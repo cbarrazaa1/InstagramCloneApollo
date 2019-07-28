@@ -2,21 +2,31 @@
  * @format
  * @flow strict
  */
-
-import {StyleSheet, View, TextInput} from 'react-native';
+'use strict';
 import * as React from 'react';
+import {StyleSheet, TextInput, View} from 'react-native';
 type ViewStyleProp = React.ElementProp<typeof View, 'style'>;
 
 type Props = {|
-  +placeholder: String,
+  +placeholder: string,
+  +secureTextEntry?: boolean,
   +style?: ViewStyleProp,
   +onChangeText: (text: string) => void,
 |};
 
-function AuthTextInput({placeholder, style, onChangeText}: Props): React.Node {
+function AuthTextInput({
+  placeholder,
+  secureTextEntry = false,
+  style,
+  onChangeText,
+}: Props): React.Node {
   return (
     <View style={[style, styles.root]}>
-      <TextInput placeholder={placeholder} style={styles.input} />
+      <TextInput
+        placeholder={placeholder}
+        secureTextEntry={secureTextEntry}
+        style={styles.input}
+      />
     </View>
   );
 }

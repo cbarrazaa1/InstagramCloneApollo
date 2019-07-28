@@ -2,21 +2,24 @@
  * @format
  * @flow strict
  */
-import Button from './AuthButton';
-import TextInput from './AuthTextInput';
-import {Mutation} from 'react-apollo';
-import {gql} from 'apollo-boost';
-import {
-  StyleSheet,
-  View,
-  Text,
-  Image,
-  Dimensions,
-  KeyboardAvoidingView,
-} from 'react-native';
+'use strict';
 import * as React from 'react';
+import {
+  Dimensions,
+  Image,
+  KeyboardAvoidingView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import Button from './AuthButton';
 // $FlowFixMe
 import Logo from '../../res/instagram-logo.png';
+import {Mutation} from 'react-apollo';
+import TextInput from './AuthTextInput';
+import {gql} from 'apollo-boost';
+import {useNavigation} from 'react-navigation-hooks';
 
 type Props = {||};
 
@@ -28,7 +31,8 @@ const mutation = gql`
   }
 `;
 
-function AuthScreen(): React.Node {
+function LoginScreen(_: Props): React.Node {
+  const {navigate} = useNavigation();
   return (
     <>
       <View style={styles.root}>
@@ -36,19 +40,22 @@ function AuthScreen(): React.Node {
         <View style={styles.inputContainer}>
           <View style={styles.inputView}>
             <TextInput placeholder="Username" />
-            <TextInput placeholder="Password" />
+            <TextInput placeholder="Password" secureTextEntry={true} />
             <Mutation
               mutation={mutation}
               variables={{username: 'cbarrazaa2', password: 'test'}}
             >
-              {userSignUp => <Button text="Log In" onPress={userSignUp} />}
+              {userSignUp => <Button text="Log In" onPress={() => null} />}
             </Mutation>
           </View>
         </View>
       </View>
       <View style={styles.footerContainer}>
         <Text style={styles.footerLabel}>
-          Don't have an account? <Text style={styles.bold}>Sign up.</Text>
+          Don't have an account?{' '}
+          <Text onPress={() => navigate('SignUp')} style={styles.bold}>
+            Sign up.
+          </Text>
         </Text>
       </View>
     </>
@@ -94,4 +101,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default React.memo<Props>(AuthScreen);
+export default React.memo<Props>(LoginScreen);
