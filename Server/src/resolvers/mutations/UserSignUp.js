@@ -6,12 +6,13 @@ import type {ViewerContext} from '../../types/ViewerContext';
 
 type UserSignUpMutationVariables = {|
   +username: string,
+  +name: string,
   +password: string,
 |};
 
 const UserSignUpMutation = async (
   parent: null,
-  {username, password}: UserSignUpMutationVariables,
+  {username, name, password}: UserSignUpMutationVariables,
   context: ViewerContext
 ): Promise<EntUser> => {
   const user = await EntUser.genFromUsername(username);
@@ -21,6 +22,7 @@ const UserSignUpMutation = async (
 
   const newUser = EntUser.create()
     .setUsername(username)
+    .setName(name)
     .setPassword(await bcrypt.hash(password, 10));
 
   return await newUser

@@ -9,6 +9,7 @@ import mongoose, {
 const EntUserSchema: MongooseSchema<MongooseDocument> = new mongoose.Schema(
   {
     username: String,
+    name: String,
     password: String,
     authToken: String,
   }
@@ -89,6 +90,10 @@ class EntUser {
     return this.data.get('username');
   }
 
+  getName(): string {
+    return this.data.get('name');
+  }
+
   getPassword(): string {
     return this.data.get('password');
   }
@@ -110,6 +115,10 @@ class EntUser {
 
   setUsername(username: string): EntUser {
     return this.set('username', username);
+  }
+
+  setName(name: string): EntUser {
+    return this.set('name', name);
   }
 
   setPassword(password: string): EntUser {
